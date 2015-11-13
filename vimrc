@@ -29,6 +29,16 @@ endif
 
 filetype plugin indent on
 
+" Softtabs, 2 spaces
+set tabstop=2
+set shiftwidth=2
+set shiftround
+set expandtab
+set softtabstop=2
+
+" Display extra whitespace
+set list listchars=tab:»·,trail:·,nbsp:·
+
 augroup vimrcEx
   autocmd!
 
@@ -44,16 +54,11 @@ augroup vimrcEx
   autocmd BufRead,BufNewFile Appraisals set filetype=ruby
   autocmd BufRead,BufNewFile *.md set filetype=markdown
   autocmd BufRead,BufNewFile .{jscs,jshint,eslint}rc set filetype=json
+
+  let g:go_fmt_command = "goimports"
+  autocmd FileType go compiler go
+  autocmd FileType go setlocal listchars=tab:\ \ ,trail:·,nbsp:·
 augroup END
-
-" Softtabs, 2 spaces
-set tabstop=2
-set shiftwidth=2
-set shiftround
-set expandtab
-
-" Display extra whitespace
-set list listchars=tab:»·,trail:·,nbsp:·
 
 " Use one space, not two, after punctuation.
 set nojoinspaces

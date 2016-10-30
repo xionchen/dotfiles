@@ -2,6 +2,23 @@ if &compatible
   set nocompatible
 end
 
+if filereadable(expand($HOME."/.vimrc.ignorebundles"))
+  source $HOME/.vimrc.ignorebundles
+endif
+
+" Shim command and function to check that a plugin is not blacklisted
+function! PlugOrIgnore(plugin_name, ...)
+  if !exists("g:plugins_to_ignore") ||
+        \index(g:plugins_to_ignore, a:plugin_name) < 0
+    if a:0 > 0
+      Plug a:plugin_name, a:1
+    else
+      Plug a:plugin_name
+    endif
+  endif
+endfunction
+com! -nargs=+  -bar PlugOrIgnore call PlugOrIgnore(<args>)
+
 " Shim command and function to allow migration from Vundle to vim-plug.
 function! VundleToPlug(vundle_command, arg, ...)
   echom "You are using Vundle's `".a:vundle_command."` command to declare plugins. Dotfiles now uses vim-plug for plugin management. Please rename uses of `".a:vundle_command."` to `Plug`. Plugin was '".a:arg."'."
@@ -27,26 +44,26 @@ com! -nargs=+  -bar Bundle call VundleToPlug("Bundle", <args>)
 call plug#begin('~/.vim/bundle')
 
 " Define bundles via Github repos
-Plug 'christoomey/vim-run-interactive'
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'fatih/vim-go'
-Plug 'janko-m/vim-test'
-Plug 'kchmck/vim-coffee-script'
-Plug 'pbrisbin/vim-mkdir'
-Plug 'scrooloose/syntastic'
-Plug 'slim-template/vim-slim'
-Plug 'tpope/vim-bundler'
-Plug 'tpope/vim-endwise'
-Plug 'tpope/vim-eunuch'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-projectionist'
-Plug 'tpope/vim-rails'
-Plug 'tpope/vim-rake'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-rhubarb'
-Plug 'tpope/vim-surround'
-Plug 'vim-ruby/vim-ruby'
-Plug 'vim-scripts/tComment'
+PlugOrIgnore 'christoomey/vim-run-interactive'
+PlugOrIgnore 'ctrlpvim/ctrlp.vim'
+PlugOrIgnore 'fatih/vim-go'
+PlugOrIgnore 'janko-m/vim-test'
+PlugOrIgnore 'kchmck/vim-coffee-script'
+PlugOrIgnore 'pbrisbin/vim-mkdir'
+PlugOrIgnore 'scrooloose/syntastic'
+PlugOrIgnore 'slim-template/vim-slim'
+PlugOrIgnore 'tpope/vim-bundler'
+PlugOrIgnore 'tpope/vim-endwise'
+PlugOrIgnore 'tpope/vim-eunuch'
+PlugOrIgnore 'tpope/vim-fugitive'
+PlugOrIgnore 'tpope/vim-projectionist'
+PlugOrIgnore 'tpope/vim-rails'
+PlugOrIgnore 'tpope/vim-rake'
+PlugOrIgnore 'tpope/vim-repeat'
+PlugOrIgnore 'tpope/vim-rhubarb'
+PlugOrIgnore 'tpope/vim-surround'
+PlugOrIgnore 'vim-ruby/vim-ruby'
+PlugOrIgnore 'vim-scripts/tComment'
 
 if filereadable(expand("~/.vimrc.bundles.local"))
   source ~/.vimrc.bundles.local
